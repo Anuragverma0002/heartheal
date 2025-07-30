@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – HeartHeal</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand&family=Lora&display=swap" rel="stylesheet">
+  <style>
+    /* Optional: if not already in your CSS */
+    .logo-img {
+      width: 80px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <img src="../assets/HeartHeal.png" alt="HeartHeal Logo" class="logo-img" />
+    <h1>Welcome Back</h1>
+    <form onsubmit="return loginUser(event)">
+      <input type="email" id="email" placeholder="yourname@gmail.com" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+    <div class="footer-link">
+      Don’t have an account? <a href="signup.html">Register</a>
+    </div>
+  </div>
+
+  <script src="../js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up – HeartHeal</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand&family=Lora&display=swap" rel="stylesheet">
+  <style>
+    /* Add logo style if not already present */
+    .logo-img {
+      width: 80px;
+      height: auto;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-card">
+    <img src="../assets/HeartHeal.png" alt="HeartHeal Logo" class="logo-img" />
+    <h1>Create Your Account</h1>
+    <form onsubmit="return registerUser(event)">
+      <input type="text" id="name" placeholder="Your Full Name" required />
+      <input type="email" id="email" placeholder="yourname@gmail.com" required />
+      <input type="password" id="password" placeholder="Create Password" required />
+      <input type="password" id="confirm" placeholder="Confirm Password" required />
+      <button type="submit">Sign Up</button>
+    </form>
+    <div class="footer-link">
+      Already have an account? <a href="login.html">Login</a>
+    </div>
+  </div>
+
+  <script>
+    function registerUser(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('password').value;
+      const confirm = document.getElementById('confirm').value;
+
+      if (pass !== confirm) {
+        alert("Passwords do not match!");
+        return;
+      }
+
+      console.log("User registered:", { name, email });
+      alert("Signup successful (mock)");
+      // TODO: Replace with actual signup API call
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mood Tracker</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2>📈 How Are You Feeling Today?</h2>
+    <form onsubmit="logMood(event)">
+      <label for="mood">Mood (1-5):</label>
+      <input type="number" id="mood" min="1" max="5" required />
+      <input type="text" id="note" placeholder="Optional note..."/>
+      <button type="submit">Log Mood</button>
+    </form>
+    
+    <canvas id="moodChart" width="400" height="200"></canvas>
+  </div>
+  <script src="js/mood.js"></script>
+</body>
+</html>
+
