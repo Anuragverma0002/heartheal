@@ -1,14 +1,15 @@
-<!-- client/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HeartHeal – Dashboard</title>
   <link rel="stylesheet" href="css/styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
 </head>
 <body class="index-body">
+  <!-- 🌟 Header -->
   <header class="dashboard-header">
     <img src="assets/HeartHeal.png" alt="HeartHeal Logo" class="logo" />
     <h1 class="welcome-title">Welcome to <span class="highlight">HeartHeal</span> 💖</h1>
@@ -26,16 +27,18 @@
     <a href="vent.html" class="tile">💬 Vent</a>
     <a href="mood.html" class="tile">📊 Mood Tracker</a>
     <a href="thoughts.html" class="tile">📓 Thoughts</a>
-    <a href="index.html" class="tile">🏠 Healing Home</a>
+    <span class="tile active">🏠 Healing Home</span>
   </section>
 
-  <!-- 🌸 Animated background hearts -->
+  <!-- 🌸 Floating Hearts (CSS Animation) -->
   <div class="floating-hearts"></div>
 
+  <!-- 📜 Footer -->
   <footer class="dashboard-footer">
     <p>&copy; 2025 HeartHeal. You’re not alone. ❤️</p>
   </footer>
 
+  <!-- 📦 JS -->
   <script src="js/mood.js"></script>
 </body>
 </html>
