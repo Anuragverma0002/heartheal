@@ -42,105 +42,120 @@ async function logMood(e) {
 
   applyMoodTheme(mood);
 
-fetch("http://localhost:3000/api/moods", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ mood, note })
-  }).then(async (res) => {
-  if (!res.ok) {
-    const err = await res.text();
-    console.error("Mood save failed:", err);
+  try {
+    const res = await fetch("https://heartheal.onrender.com/api/moods", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mood, note })
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error("Mood save failed:", errText);
+      alert("Failed to save mood 😔");
+    }
+  } catch (err) {
+    console.error("Network error:", err);
+    alert("Something went wrong while saving mood.");
   }
-});
 
   document.getElementById("mood").value = "";
   document.getElementById("note").value = "";
 
-  loadChart();
+  await loadChart();
 }
 
 // 📊 Load and display mood chart
 async function loadChart() {
-  const res = await fetch("/api/moods");
-  const data = await res.json();
+  try {
+    const res = await fetch("https://heartheal.onrender.com/api/moods");
+    if (!res.ok) {
+      console.error("Failed to load mood data.");
+      return;
+    }
 
-  if (!data || data.length === 0) return;
+    const data = await res.json();
+    if (!data || data.length === 0) return;
 
-  const now = new Date();
+    const now = new Date();
 
-  const labels = data.map((entry) => {
-    const entryDate = new Date(entry.date);
-    const daysDiff = Math.floor((now - entryDate) / (1000 * 60 * 60 * 24));
+    const labels = data.map((entry) => {
+      const entryDate = new Date(entry.date);
+      const daysDiff = Math.floor((now - entryDate) / (1000 * 60 * 60 * 24));
 
-    if (daysDiff === 0) return "Today";
-    if (daysDiff === 1) return "Yesterday";
-    return `${daysDiff} days ago`;
-  });
+      if (daysDiff === 0) return "Today";
+      if (daysDiff === 1) return "Yesterday";
+      return `${daysDiff} days ago`;
+    });
 
-  const values = data.map((entry) => entry.mood);
-  const notes = data.map((entry) => entry.note || "No note");
+    const values = data.map((entry) => entry.mood);
+    const notes = data.map((entry) => entry.note || "No note");
 
-  const lastMood = values[values.length - 1];
-  applyMoodTheme(lastMood);
+    const lastMood = values[values.length - 1];
+    applyMoodTheme(lastMood);
 
-  // 🌟 Save current mood to localStorage
-  localStorage.setItem("userMood", lastMood);
+    // 🌟 Save current mood to localStorage
+    localStorage.setItem("userMood", lastMood);
 
-  // 🌟 Display motivational quote
-  const moodQuotes = {
-    1: "It's okay to not be okay. You're doing your best.",
-    2: "Healing takes time. Breathe.",
-    3: "Progress is progress, no matter how small.",
-    4: "The sun will rise and so will you.",
-    5: "Your heart is stronger than you think. 💪"
-  };
-  const moodQuoteEl = document.getElementById("moodQuote");
-  if (moodQuoteEl) {
-    moodQuoteEl.textContent =
-      moodQuotes[lastMood] || "You matter. You’re loved.";
-  }
+    // 🌟 Display motivational quote
+    const moodQuotes = {
+      1: "It's okay to not be okay. You're doing your best.",
+      2: "Healing takes time. Breathe.",
+      3: "Progress is progress, no matter how small.",
+      4: "The sun will rise and so will you.",
+      5: "Your heart is stronger than you think. 💪"
+    };
+    const moodQuoteEl = document.getElementById("moodQuote");
+    if (moodQuoteEl) {
+      moodQuoteEl.textContent =
+        moodQuotes[lastMood] || "You matter. You’re loved.";
+    }
 
-  if (chart) chart.destroy();
+    if (chart) chart.destroy();
 
-  chart = new Chart(document.getElementById("moodChart"), {
-    type: "line",
-    data: {
-      labels,
-      datasets: [{
-        label: "Mood Over Time",
-        data: values,
-        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent-color') || '#4fc3f7',
-        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-color') || '#e1f5fe',
-        fill: true,
-        tension: 0.4,
-        pointRadius: 6,
-        pointHoverRadius: 8
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          min: 1,
-          max: 5,
-          ticks: {
-            stepSize: 1,
-            callback: (value) => moodLabels[value] || value
-          }
-        }
+    chart = new Chart(document.getElementById("moodChart"), {
+      type: "line",
+      data: {
+        labels,
+        datasets: [{
+          label: "Mood Over Time",
+          data: values,
+          borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent-color') || '#4fc3f7',
+          backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-color') || '#e1f5fe',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 6,
+          pointHoverRadius: 8
+        }]
       },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              const mood = moodLabels[context.parsed.y] || context.parsed.y;
-              const note = notes[context.dataIndex];
-              return `${mood} - ${note}`;
+      options: {
+        scales: {
+          y: {
+            min: 1,
+            max: 5,
+            ticks: {
+              stepSize: 1,
+              callback: (value) => moodLabels[value] || value
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const mood = moodLabels[context.parsed.y] || context.parsed.y;
+                const note = notes[context.dataIndex];
+                return `${mood} - ${note}`;
+              }
             }
           }
         }
       }
-    }
-  });
+    });
+
+  } catch (err) {
+    console.error("Failed to load mood chart:", err);
+  }
 }
 
 // 🚀 Load on DOM ready
