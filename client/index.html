@@ -1,41 +1,25 @@
-<!-- client/index.html -->
+<!-- home.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>HeartHeal – Dashboard</title>
-  <link rel="stylesheet" href="css/styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>HeartHeal – Home</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="index-body">
-  <header class="dashboard-header">
-    <img src="assets/HeartHeal.png" alt="HeartHeal Logo" class="logo" />
-    <h1 class="welcome-title">Welcome to <span class="highlight">HeartHeal</span> 💖</h1>
-    <p class="tagline">You’re healing, and we’re with you every step. 🌈</p>
+<body class="home-body">
+  <header class="home-header">
+    <img src="assets/HeartHeal.png" alt="HeartHeal Logo" class="logo">
+     
   </header>
 
-  <!-- 🌠 Mood Quote Box -->
-  <section class="mood-quote-box">
-    <h2>Today's Healing Quote</h2>
-    <p id="moodQuote">Loading inspirational quote...</p>
-  </section>
+  <main class="home-main">
+    <h1>💔 HeartHeal</h1>
+    <p>Breakup Recovery & Emotional Healing for the Youth</p>
+    <a href="auth/login.html" class="cta-button">Start Healing</a>
+  </main>
 
-  <!-- 🌈 Navigation Tiles -->
-  <section class="nav-tiles">
-    <a href="vent.html" class="tile">💬 Vent</a>
-    <a href="mood.html" class="tile">📊 Mood Tracker</a>
-    <a href="thoughts.html" class="tile">📓 Thoughts</a>
-    <a href="home.html" class="tile">🏠 Healing Home</a>
-  </section>
-
-  <!-- 🌸 Animated background hearts -->
-  <div class="floating-hearts"></div>
-
-  <footer class="dashboard-footer">
+  <footer class="home-footer">
     <p>&copy; 2025 HeartHeal. You’re not alone. ❤️</p>
   </footer>
-
-  <script src="js/mood.js"></script>
 </body>
 </html>
