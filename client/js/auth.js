@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const BASE_URL = "https://heartheal.onrender.com";
+
   // LOGIN HANDLER
   const loginForm = document.getElementById("login-form");
   if (loginForm) {
@@ -13,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       try {
-        const res = await fetch("https://heartheal.onrender.com/api/auth/login", {
+        const res = await fetch(`${BASE_URL}/api/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
@@ -22,11 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await res.json();
 
         if (!res.ok) {
-          return alert("Login failed: " + (data.message || "Invalid credentials"));
+          return alert("Login failed: " + (data.error || "Invalid credentials"));
         }
 
         alert("Welcome back!");
-        window.location.href = "/client/home.html";
+        // Optionally store token: localStorage.setItem("token", data.token);
+        window.location.href = "/home.html";  // ✅ update path as per Vercel structure
       } catch (err) {
         console.error("Login error:", err);
         alert("An error occurred during login.");
@@ -53,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       try {
-        const res = await fetch("https://heartheal.onrender.com/api/auth/signup", {
+        const res = await fetch(`${BASE_URL}/api/auth/signup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name, email, password }),
@@ -62,11 +65,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await res.json();
 
         if (!res.ok) {
-          return alert("Signup failed: " + (data.message || "Try again later."));
+          return alert("Signup failed: " + (data.error || "Try again later."));
         }
 
         alert("Signup successful! You can now log in.");
-        window.location.href = "/client/login.html";
+        window.location.href = "/login.html";  // ✅ update path as per Vercel structure
       } catch (err) {
         console.error("Signup error:", err);
         alert("An error occurred during signup.");
