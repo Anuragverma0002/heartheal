@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Check if it's login page
-  const loginForm = document.querySelector("form[onsubmit*='loginUser']");
+  // LOGIN HANDLER
+  const loginForm = document.getElementById("login-form");
   if (loginForm) {
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -34,8 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Check if it's signup page
-  const signupForm = document.querySelector("form[onsubmit*='registerUser']");
+  // SIGNUP HANDLER
+  const signupForm = document.getElementById("signup-form");
   if (signupForm) {
     signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
