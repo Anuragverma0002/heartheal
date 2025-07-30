@@ -1,85 +1,76 @@
-// js/auth.js
+document.addEventListener("DOMContentLoaded", () => {
+  // Check if it's login page
+  const loginForm = document.querySelector("form[onsubmit*='loginUser']");
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
 
-// Toggle forms
-document.getElementById("loginBtn").addEventListener("click", () => {
-  document.getElementById("loginForm").classList.remove("hidden");
-  document.getElementById("signupForm").classList.add("hidden");
-});
+      if (!email || !password) {
+        alert("Please enter both email and password.");
+        return;
+      }
 
-document.getElementById("signupBtn").addEventListener("click", () => {
-  document.getElementById("signupForm").classList.remove("hidden");
-  document.getElementById("loginForm").classList.add("hidden");
-});
+      try {
+        const res = await fetch("https://heartheal.onrender.com/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
 
-// Handle Login
-document.querySelector("#loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+        const data = await res.json();
 
-  const email = document.getElementById("loginEmail").value.trim();
-  const password = document.getElementById("loginPassword").value.trim();
+        if (!res.ok) {
+          return alert("Login failed: " + (data.message || "Invalid credentials"));
+        }
 
-  if (!email || !password) {
-    alert("Please enter both email and password.");
-    return;
-  }
-
-  try {
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+        alert("Welcome back!");
+        window.location.href = "/client/home.html";
+      } catch (err) {
+        console.error("Login error:", err);
+        alert("An error occurred during login.");
+      }
     });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      return alert("Login failed: " + (data.message || "Invalid credentials"));
-    }
-
-    // Success
-    alert("Welcome back!");
-    window.location.href = "/client/home.html";
-  } catch (err) {
-    console.error("Login error:", err);
-    alert("An error occurred during login.");
-  }
-});
-
-// Handle Signup
-document.querySelector("#signupForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const name = document.getElementById("signupName").value.trim();
-  const email = document.getElementById("signupEmail").value.trim();
-  const password = document.getElementById("signupPassword").value.trim();
-  const confirmPassword = document.getElementById("signupConfirm").value.trim();
-
-  if (!name || !email || !password || !confirmPassword) {
-    return alert("Please fill in all fields.");
   }
 
-  if (password !== confirmPassword) {
-    return alert("Passwords do not match.");
-  }
+  // Check if it's signup page
+  const signupForm = document.querySelector("form[onsubmit*='registerUser']");
+  if (signupForm) {
+    signupForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirm").value;
 
-  try {
-    const res = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
+      if (!name || !email || !password || !confirmPassword) {
+        return alert("Please fill in all fields.");
+      }
+
+      if (password !== confirmPassword) {
+        return alert("Passwords do not match.");
+      }
+
+      try {
+        const res = await fetch("https://heartheal.onrender.com/api/auth/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          return alert("Signup failed: " + (data.message || "Try again later."));
+        }
+
+        alert("Signup successful! You can now log in.");
+        window.location.href = "/client/login.html";
+      } catch (err) {
+        console.error("Signup error:", err);
+        alert("An error occurred during signup.");
+      }
     });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      return alert("Signup failed: " + (data.message || "Try again later."));
-    }
-
-    alert("Signup successful! Now log in.");
-    document.getElementById("loginForm").classList.remove("hidden");
-    document.getElementById("signupForm").classList.add("hidden");
-  } catch (err) {
-    console.error("Signup error:", err);
-    alert("An error occurred during signup.");
   }
 });
