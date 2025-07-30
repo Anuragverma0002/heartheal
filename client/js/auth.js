@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         alert("Signup successful! You can now log in.");
-        window.location.href = "/login.html";  // ✅ update path as per Vercel structure
+        window.location.href = "/auth/login.html";  // ✅ update path as per Vercel structure
       } catch (err) {
         console.error("Signup error:", err);
         alert("An error occurred during signup.");
