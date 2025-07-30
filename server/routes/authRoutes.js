@@ -8,7 +8,7 @@ const User = require('../models/User');
 const JWT_SECRET = process.env.JWT_SECRET || 'defaultsecret';
 
 // Register
-router.post('/register', async (req, res) => {
+router.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
   try {
     const existingUser = await User.findOne({ email });
