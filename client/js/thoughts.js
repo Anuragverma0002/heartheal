@@ -42,6 +42,12 @@ document.addEventListener("DOMContentLoaded", () => {
       thoughts.reverse().forEach((t) => {
         const div = document.createElement("div");
         div.className = "vent-item";
+          const dateObj = new Date(t.createdAt);
+        const formattedDate = dateObj.toLocaleDateString("en-IN", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
         const time = new Date(t.createdAt).toLocaleTimeString([], {
           hour: '2-digit',
           minute: '2-digit'
