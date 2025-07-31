@@ -516,11 +516,10 @@ h2, h3 {
   0% { transform: translateY(0); opacity: 0.2; }
   100% { transform: translateY(-120vh); opacity: 0; }
 }
-
 /* 3D Back Button Styling */
 .back-btn {
   position: fixed;
-  top: 16px;
+  bottom: 16px;
   right: 16px;
   background: linear-gradient(135deg, #8e2de2, #4a00e0);
   color: white;
@@ -548,7 +547,7 @@ h2, h3 {
   .back-btn {
     padding: 8px 14px;
     font-size: 14px;
-    top: 12px;
+    bottom: 12px;
     right: 12px;
   }
 }
