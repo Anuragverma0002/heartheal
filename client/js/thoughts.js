@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const BASE_URL = "https://heartheal.onrender.com"; // change to http://localhost:3000 for local dev
+  const BASE_URL = "https://heartheal.onrender.com"; // Change to http://localhost:3000 for local dev
   const input = document.getElementById("thoughtInput");
   const list = document.getElementById("thoughtList");
   const saveBtn = document.getElementById("saveThoughtBtn");
