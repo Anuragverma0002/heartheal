@@ -42,20 +42,30 @@ document.addEventListener("DOMContentLoaded", () => {
       thoughts.reverse().forEach((t) => {
         const div = document.createElement("div");
         div.className = "vent-item";
+          let displayText = t.content;
+
+        // Check if createdAt is a valid date
+        if (t.createdAt && !isNaN(new Date(t.createdAt))) {
           const dateObj = new Date(t.createdAt);
-        const formattedDate = dateObj.toLocaleDateString("en-IN", {
-          day: "numeric",
-          month: "short",
-          year: "numeric",
-        });
-        const time = new Date(t.createdAt).toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-        div.textContent = `${t.content} (${time})`;
+          const formattedDate = dateObj.toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          });
+          const formattedTime = dateObj.toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
+          displayText += ` (${formattedDate}, ${formattedTime})`;
+        } else {
+          displayText += ` (Just now)`; // fallback for legacy data
+        }
+
+        div.textContent = displayText;
         list.appendChild(div);
       });
-    } catch (err) {
+    }  catch (err) {
       console.error("Load failed:", err);
       list.innerHTML = "<p>Could not load thoughts.</p>";
     }
