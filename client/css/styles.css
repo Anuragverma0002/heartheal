@@ -516,3 +516,26 @@ h2, h3 {
   0% { transform: translateY(0); opacity: 0.2; }
   100% { transform: translateY(-120vh); opacity: 0; }
 }
+
+/* 3D Back Button Styling */
+.back-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #8e2de2, #4a00e0);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.back-btn:hover {
+  background: linear-gradient(135deg, #ff6ec4, #7873f5);
+  transform: scale(1.08);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+}
