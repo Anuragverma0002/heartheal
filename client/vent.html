@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Venting Board</title>
+  <title>Thought Bubbles</title>
   <link rel="stylesheet" href="css/styles.css"/>
 </head>
-<body>
+<body class="bubbles">
   <div class="container">
-    <h2>📝 Share Your Feelings</h2>
-    <textarea id="ventInput" placeholder="Let it all out..."></textarea>
-    <button onclick="submitVent()">Submit Vent</button>
-    
-    <h3>Recent Vents</h3>
-    <div id="ventList" class="vent-list"></div>
+    <h2>💭 Let Your Thoughts Flow</h2>
+    <textarea id="thoughtInput" placeholder="Start typing... thoughts will fade in 60s unless saved!"></textarea>
+    <button id="saveThoughtBtn">Save Thought</button>
+
+    <h3>Saved Thoughts</h3>
+    <div id="thoughtList"></div>
   </div>
-  <script src="js/vent.js"></script>
+  <script src="js/thoughts.js"></script>
 </body>
 </html>
