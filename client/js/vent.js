@@ -1,76 +1,74 @@
 document.addEventListener("DOMContentLoaded", () => {
   const BASE_URL = "https://heartheal.onrender.com"; // Change to http://localhost:3000 for local dev
+  const input = document.getElementById("thoughtInput");
+  const list = document.getElementById("thoughtList");
+  const saveBtn = document.getElementById("saveThoughtBtn");
 
-  const input = document.getElementById("ventInput");
-  const list = document.getElementById("ventList");
-  const submitBtn = document.getElementById("submitVentBtn");
-
-  // 🌬️ Submit a new vent message
-  async function submitVent() {
+  // Save a new thought
+  async function saveThought() {
     const text = input.value.trim();
     if (!text) return;
 
     try {
-      const res = await fetch(`${BASE_URL}/api/vents`, {
+      const res = await fetch(`${BASE_URL}/api/thoughts`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text })
+        body: JSON.stringify({ content: text }),
       });
 
       if (!res.ok) {
         const err = await res.text();
-        console.error("Error submitting vent:", err);
-        alert("Failed to post your vent.");
+        console.error("Error saving thought:", err);
+        alert("Failed to save thought.");
         return;
       }
 
       input.value = "";
-      loadVents();
+      loadThoughts();
     } catch (err) {
-      console.error("Submit failed:", err);
+      console.error("Save failed:", err);
     }
   }
 
-  // 📜 Load all vents
-  async function loadVents() {
+  // Load all thoughts
+  async function loadThoughts() {
     try {
-      const res = await fetch(`${BASE_URL}/api/vents`);
-      if (!res.ok) throw new Error("Failed to fetch vents.");
-      const vents = await res.json();
+      const res = await fetch(`${BASE_URL}/api/thoughts`);
+      if (!res.ok) throw new Error("Failed to fetch thoughts.");
+      const thoughts = await res.json();
 
       list.innerHTML = "";
 
-      vents.reverse().forEach((v) => {
-        const el = document.createElement("div");
-        el.className = "vent-item";
-        el.innerHTML = `
-          <p>${sanitize(v.message)}</p>
-          <small>${new Date(v.createdAt).toLocaleString()}</small>
-          <div class="reactions">
-            <button title="Support">💙</button>
-            <button title="Hug">🤗</button>
-            <button title="Hope">✨</button>
-          </div>
-        `;
-        list.appendChild(el);
+      thoughts.reverse().forEach((t) => {
+        const div = document.createElement("div");
+        div.className = "vent-item";
+        const time = new Date(t.createdAt).toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        div.textContent = `${t.content} (${time})`;
+        list.appendChild(div);
       });
     } catch (err) {
       console.error("Load failed:", err);
-      list.innerHTML = "<p>Could not load vents.</p>";
+      list.innerHTML = "<p>Could not load thoughts.</p>";
     }
   }
 
-  // 🛡️ Prevent XSS from user input
-  function sanitize(str) {
-    const div = document.createElement("div");
-    div.textContent = str;
-    return div.innerHTML;
+  // Auto-clear thought input after 60 seconds
+  setInterval(() => {
+    if (input.value) {
+      setTimeout(() => {
+        input.value = "";
+      }, 60000);
+    }
+  }, 5000);
+
+  // Bind save button
+  if (saveBtn) {
+    saveBtn.addEventListener("click", saveThought);
   }
 
-  // Bind submit button
-  if (submitBtn) {
-    submitBtn.addEventListener("click", submitVent);
-  }
-
-  loadVents();
+  // Initial load
+  loadThoughts();
 });
