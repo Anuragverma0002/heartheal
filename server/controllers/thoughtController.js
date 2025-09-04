@@ -1,10 +1,8 @@
-// server/controllers/thoughtController.js
 const Thought = require("../models/Thought");
 
-// GET all thoughts
 exports.getAllThoughts = async (req, res) => {
   try {
-    const thoughts = await Thought.find().sort({ timestamp: -1 });
+    const thoughts = await Thought.find({ user: req.user._id }).sort({ createdAt: -1 });
     res.json(thoughts);
   } catch (err) {
     console.error("Error fetching thoughts:", err);
@@ -12,7 +10,6 @@ exports.getAllThoughts = async (req, res) => {
   }
 };
 
-// POST new thought
 exports.addThought = async (req, res) => {
   const { content } = req.body;
 
@@ -21,9 +18,12 @@ exports.addThought = async (req, res) => {
   }
 
   try {
-    const newThought = new Thought({ content });
+    const newThought = new Thought({
+      user: req.user._id,
+      content,
+    });
     await newThought.save();
-    res.status(201).json({ message: "Thought saved!", thought: newThought });
+    res.status(201).json(newThought);
   } catch (err) {
     console.error("Error saving thought:", err);
     res.status(500).json({ error: "Failed to save thought" });
