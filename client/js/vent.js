@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const BASE_URL = "https://heartheal.onrender.com"; // Change to http://localhost:3000 for local dev
+  const BASE_URL = "https://heartheal.onrender.com"; // 🔄 Change to http://localhost:3000 for local dev
 
   const input = document.getElementById("ventInput");
   const list = document.getElementById("ventList");
@@ -11,9 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!text) return;
 
     try {
+      const token = localStorage.getItem("token"); // ✅ JWT from login
       const res = await fetch(`${BASE_URL}/api/vents`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          ...(token && { "Authorization": `Bearer ${token}` }) // send token if logged in
+        },
         body: JSON.stringify({ message: text })
       });
 
@@ -31,15 +35,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // 📜 Load all vents
+  // 📜 Load vents for logged-in user
   async function loadVents() {
     try {
-      const res = await fetch(`${BASE_URL}/api/vents`);
+      const token = localStorage.getItem("token"); // ✅ JWT from login
+      const res = await fetch(`${BASE_URL}/api/vents`, {
+        headers: {
+          ...(token && { "Authorization": `Bearer ${token}` })
+        }
+      });
+
       if (!res.ok) throw new Error("Failed to fetch vents.");
       const vents = await res.json();
 
       list.innerHTML = "";
 
+      // Show newest first
       vents.reverse().forEach((v) => {
         const el = document.createElement("div");
         el.className = "vent-item";
