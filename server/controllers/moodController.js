@@ -1,26 +1,27 @@
 const Mood = require("../models/Mood");
 
-exports.submitMood = async (req, res) => {
+exports.addMood = async (req, res) => {
   try {
-    const { userId, moodLevel, note } = req.body;
-
-    const mood = new Mood({ userId, moodLevel, note });
-    await mood.save();
-
-    res.status(201).json({ message: "Mood recorded" });
+    const { mood, note } = req.body;
+    const newMood = new Mood({
+      user: req.user._id,
+      mood,
+      note,
+    });
+    await newMood.save();
+    res.status(201).json(newMood);
   } catch (err) {
-        console.error("Mood submission error:", err.message, err.stack);
-    res.status(500).json({ error: "Could not save mood", details: err.message });
+    console.error("Mood submission error:", err);
+    res.status(500).json({ error: "Failed to save mood" });
   }
 };
 
-exports.getMoodStats = async (req, res) => {
+exports.getMoods = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const moods = await Mood.find({ userId }).sort({ createdAt: 1 });
-
-    res.status(200).json(moods);
+    const moods = await Mood.find({ user: req.user._id }).sort({ createdAt: 1 });
+    res.json(moods);
   } catch (err) {
-    res.status(500).json({ error: "Could not fetch mood data", details: err.message });
+    console.error("Fetch moods error:", err);
+    res.status(500).json({ error: "Failed to fetch moods" });
   }
 };
