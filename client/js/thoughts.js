@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const BASE_URL = "https://heartheal.onrender.com"; // Change to http://localhost:3000 for local dev
+  const BASE_URL = "https://heartheal.onrender.com"; // 🔄 Change to http://localhost:3000 for local dev
   const input = document.getElementById("thoughtInput");
   const list = document.getElementById("thoughtList");
   const saveBtn = document.getElementById("saveThoughtBtn");
@@ -10,9 +10,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!text) return;
 
     try {
+      const token = localStorage.getItem("token"); // ✅ JWT from login
       const res = await fetch(`${BASE_URL}/api/thoughts`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { "Authorization": `Bearer ${token}` }) // ✅ send token if exists
+        },
         body: JSON.stringify({ content: text }),
       });
 
@@ -30,10 +34,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Load all thoughts
+  // Load only logged-in user’s thoughts
   async function loadThoughts() {
     try {
-      const res = await fetch(`${BASE_URL}/api/thoughts`);
+      const token = localStorage.getItem("token"); // ✅ JWT from login
+      const res = await fetch(`${BASE_URL}/api/thoughts`, {
+        headers: {
+          ...(token && { "Authorization": `Bearer ${token}` }) // ✅ restrict to user
+        }
+      });
+
       if (!res.ok) throw new Error("Failed to fetch thoughts.");
       const thoughts = await res.json();
 
@@ -42,7 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
       thoughts.reverse().forEach((t) => {
         const div = document.createElement("div");
         div.className = "vent-item";
-          let displayText = t.content;
+
+        let displayText = t.content;
 
         // Check if createdAt is a valid date
         if (t.createdAt && !isNaN(new Date(t.createdAt))) {
@@ -65,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
         div.textContent = displayText;
         list.appendChild(div);
       });
-    }  catch (err) {
+    } catch (err) {
       console.error("Load failed:", err);
       list.innerHTML = "<p>Could not load thoughts.</p>";
     }
