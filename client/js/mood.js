@@ -43,9 +43,13 @@ async function logMood(e) {
   applyMoodTheme(mood);
 
   try {
+    const token = localStorage.getItem("token"); // ✅ stored at login
     const res = await fetch("https://heartheal.onrender.com/api/moods", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`  // ✅ Send user auth
+      },
       body: JSON.stringify({ mood, note })
     });
 
@@ -68,7 +72,11 @@ async function logMood(e) {
 // 📊 Load and display mood chart
 async function loadChart() {
   try {
-    const res = await fetch("https://heartheal.onrender.com/api/moods");
+    const token = localStorage.getItem("token"); // ✅ stored at login
+    const res = await fetch("https://heartheal.onrender.com/api/moods", {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+
     if (!res.ok) {
       console.error("Failed to load mood data.");
       return;
