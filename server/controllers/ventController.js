@@ -2,22 +2,25 @@ const Vent = require("../models/Vent");
 
 exports.submitVent = async (req, res) => {
   try {
-    const { userId, message } = req.body;
-
-    const vent = new Vent({ userId, message });
-    await vent.save();
-
-    res.status(201).json({ message: "Vent saved successfully" });
+    const { message } = req.body;
+    const newVent = new Vent({
+      user: req.user._id,
+      message,
+    });
+    await newVent.save();
+    res.status(201).json(newVent);
   } catch (err) {
-    res.status(500).json({ error: "Failed to submit vent", details: err.message });
+    console.error("Vent error:", err);
+    res.status(500).json({ error: "Failed to submit vent" });
   }
 };
 
 exports.getAllVents = async (req, res) => {
   try {
-    const vents = await Vent.find().sort({ createdAt: -1 });
-    res.status(200).json(vents);
+    const vents = await Vent.find({ user: req.user._id }).sort({ createdAt: -1 });
+    res.json(vents);
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch vents", details: err.message });
+    console.error("Error fetching vents:", err);
+    res.status(500).json({ error: "Failed to fetch vents" });
   }
 };
